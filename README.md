@@ -1,6 +1,6 @@
-# Blog del Informático (nueva versión) - Un Blog Minimalista y Moderno
+# TecnoBlog (nueva versión) - Un Blog Minimalista y Moderno
 
-¡Bienvenido al Blog del Informático totalmente remasterizado! Un proyecto de blog personal (creado inicialmente con Spring Boot y ahora migrado a Next.js 15) con las últimas tecnologías web, diseñado para ser rápido, funcional y estéticamente agradable.
+¡Bienvenido a TecnoBlog (lo que era el blog del informático) totalmente remasterizado! Un proyecto de blog personal (creado inicialmente con Spring Boot y ahora migrado a Next.js 15) con las últimas tecnologías web, diseñado para ser rápido, funcional y estéticamente agradable.
 
 ![Landing Page](./public/placeholder.jpg)
 
@@ -39,7 +39,7 @@ Asegurate de tener instalado [Node.js](https://nodejs.org/) (versión 18 o super
 1.  **Cloná el repositorio:**
 
     ```bash
-    git clone https://github.com/juncos22/it-blog.git
+    git clone https://github.com/juncos22/tecno-blog.git
     cd it-blog
     ```
 
