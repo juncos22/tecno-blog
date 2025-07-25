@@ -1,105 +1,121 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# Blog del Informático (nueva versión) - Un Blog Minimalista y Moderno
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+¡Bienvenido al Blog del Informático totalmente remasterizado! Un proyecto de blog personal (creado inicialmente con Spring Boot y ahora migrado a Next.js 15) con las últimas tecnologías web, diseñado para ser rápido, funcional y estéticamente agradable.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+![Landing Page](./public/placeholder.jpg)
 
-## Features
+---
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+## Tecnologías y Características Principales
 
-## Demo
+Este proyecto fue construido utilizando un stack de tecnologías moderno, enfocado en el rendimiento y la experiencia de desarrollo.
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+- **Framework:** [Next.js 15](https://nextjs.org/) (con App Router)
+- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
+- **Backend y Base de Datos:** [Supabase](https://supabase.io/)
+- **Estilos:** [Tailwind CSS](https://tailwindcss.com/)
+- **Linting:** [ESLint](https://eslint.org/)
 
-## Deploy to Vercel
+### Funcionalidades Clave
 
-Vercel deployment will guide you through creating a Supabase account and project.
+- **Diseño Responsivo:** Interfaz adaptable a cualquier tamaño de pantalla.
+- **Gestión de Posts:** Funcionalidades CRUD (Crear, Leer, Actualizar, Borrar) para los artículos del blog, conectadas a Supabase.
+- **Páginas Estáticas y Dinámicas:** Uso del App Router de Next.js para una navegación fluida y optimizada.
+- **Componentes Reutilizables:** Una arquitectura basada en componentes para mantener el código limpio y escalable.
+- **Server Actions:** Lógica de backend implementada de forma segura y eficiente del lado del servidor.
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+---
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+## Primeros Pasos
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+Para levantar el proyecto en tu entorno local, seguí estos simples pasos.
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+### Pre-requisitos
 
-## Clone and run locally
+Asegurate de tener instalado [Node.js](https://nodejs.org/) (versión 18 o superior) y [npm](https://www.npmjs.com/).
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+### Instalación
 
-2. Create a Next.js app using the Supabase Starter template npx command
+1.  **Cloná el repositorio:**
 
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
+    ```bash
+    git clone https://github.com/juncos22/it-blog.git
+    cd it-blog
+    ```
 
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
+2.  **Instalá las dependencias:**
+    ```bash
+    npm install
+    ```
 
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
+### Variables de Entorno
 
-3. Use `cd` to change into the app's directory
+Para que la aplicación se conecte con Supabase, necesitás configurar tus credenciales.
 
-   ```bash
-   cd with-supabase-app
-   ```
+1.  Creá un archivo `.env.local` en la raíz del proyecto.
+2.  Añadí las siguientes variables con tus claves de Supabase:
 
-4. Rename `.env.example` to `.env.local` and update the following:
+    ```env
+    NEXT_PUBLIC_SUPABASE_URL=TU_SUPABASE_URL
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=TU_SUPABASE_ANON_KEY
+    ```
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
+    Podés encontrar estas claves en el dashboard de tu proyecto de Supabase, en la sección `Project Settings > API`.
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
+---
 
-5. You can now run the Next.js local development server:
+## Ejecutar la Aplicación
 
-   ```bash
-   npm run dev
-   ```
+Una vez configurado, podés iniciar el servidor de desarrollo:
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+```bash
+npm run dev
+```
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+Abrí [http://localhost:3000](http://localhost:3000) en tu navegador para ver el resultado.
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+---
 
-## Feedback and issues
+## Funcionalidades Implementadas
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+El proyecto cuenta con una base sólida que incluye:
 
-## More Supabase examples
+- **`app/actions/index.ts`**: Contiene las `Server Actions` para interactuar con la tabla `blog_post` en Supabase.
+  - `getBlogPosts()`: Obtiene todos los artículos.
+  - `getBlogPostBySlug(slug)`: Obtiene un artículo específico por su `slug`.
+  - `createBlogPost(post)`: Crea un nuevo artículo.
+  - `updateBlogPost(id, post)`: Actualiza un artículo existente.
+  - `deleteBlogPost(id)`: Elimina un artículo.
+- **Componentes Principales:**
+  - `Navbar`: Barra de navegación superior.
+  - `Footer`: Pie de página.
+  - `LandingPage`: La página de inicio que da la bienvenida a los visitantes.
+  - `PostCard` y `FeaturedPostCard`: Tarjetas para mostrar los artículos del blog.
+  - `ProfileCard`: Una tarjeta de presentación personal.
+- **Estructura de Rutas:**
+  - `/`: Página de inicio.
+  - `/about`: Página de información sobre el autor o el blog.
+  - `/contact`: Página de contacto.
+  - `/posts/[slug]`: Ruta dinámica para mostrar el contenido de cada artículo.
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+---
+
+## Estructura del Proyecto
+
+El proyecto sigue la estructura recomendada por Next.js 15, utilizando el `App Router`.
+
+```
+tecno-blog/
+├── app/
+│   ├── posts/           # Rutas dinámicas para los artículos
+│   ├── about/           # Página "Sobre mí"
+│   ├── contact/         # Página de contacto
+|   ├── layout.tsx       # Layout principal
+│   └── page.tsx         # Página de inicio
+├── components/      # Componentes reutilizables de React
+├── lib/             # Funciones de utilidad, definiciones de tipos y cliente de Supabase
+├── public/              # Archivos estáticos (imágenes, etc.)
+├── .env.local           # (Necesita ser creado) Variables de entorno
+├── next.config.ts       # Configuración de Next.js
+└── package.json         # Dependencias y scripts del proyecto
+```
