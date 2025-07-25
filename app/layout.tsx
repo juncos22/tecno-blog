@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import Footer from "@/components/footer";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -9,32 +9,25 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Tecno Blog | Lo ultimo del sector IT en un solo lugar",
+  description:
+    "Blog informático para apasionados de la tecnología y los sistemas.",
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  display: "swap",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+    <html lang="es">
+      <body className={`${inter.className} bg-zinc-950 text-white`}>
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {children}
-        </ThemeProvider>
+        </main>
+        <Footer />
       </body>
     </html>
   );

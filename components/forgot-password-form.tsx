@@ -2,16 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -47,58 +37,59 @@ export function ForgotPasswordForm({
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       {success ? (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Check Your Email</CardTitle>
-            <CardDescription>Password reset instructions sent</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <div>
+          <div>
+            <h1 className="text-2xl">Revista tu correo</h1>
+            <p>Instrucciones para el reseteo de contraseña enviadas.</p>
+          </div>
+          <div>
             <p className="text-sm text-muted-foreground">
               If you registered using your email and password, you will receive
               a password reset email.
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Reset Your Password</CardTitle>
-            <CardDescription>
-              Type in your email and we&apos;ll send you a link to reset your
-              password
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+        <div>
+          <div>
+            <h1 className="text-2xl">Resetear tu Contraseña</h1>
+            <p>
+              Ingresa tu correo y contraseña para enviarte la solicitud de
+              reseteo.
+            </p>
+          </div>
+          <div>
             <form onSubmit={handleForgotPassword}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
+                  <label htmlFor="email">Email</label>
+                  <input
                     id="email"
                     type="email"
                     placeholder="m@example.com"
                     required
+                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-zinc-700 bg-zinc-800/50 placeholder-zinc-400 text-white rounded-b-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 {error && <p className="text-sm text-red-500">{error}</p>}
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? "Sending..." : "Send reset email"}
-                </Button>
+                </button>
               </div>
               <div className="mt-4 text-center text-sm">
-                Already have an account?{" "}
+                Ya posee cuenta?{" "}
                 <Link
                   href="/auth/login"
                   className="underline underline-offset-4"
                 >
-                  Login
+                  Ingrese
                 </Link>
               </div>
             </form>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
     </div>
   );
