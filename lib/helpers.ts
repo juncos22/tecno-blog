@@ -1,4 +1,9 @@
-import { BlogPost, BlogPostFromDB } from "@/lib/definitions";
+import {
+  BlogPost,
+  BlogPostFromDB,
+  CreateBlogPost,
+  CreateBlogPostFromDB,
+} from "@/lib/definitions";
 
 /**
  * Parses raw data from the 'blog_post' table into an array of BlogPost objects.
@@ -40,16 +45,16 @@ export const parseBlogPost = (data: BlogPostFromDB | null): BlogPost | null => {
   };
 };
 
-export const parseDbPost = (data: BlogPost | null): BlogPostFromDB | null => {
+export const parseDbPost = (
+  data: CreateBlogPost | null
+): CreateBlogPostFromDB | null => {
   if (!data) {
     return null;
   }
-
+  // Convert the CreateBlogPost to CreateBlogPostFromDB format
   return {
-    id: data.id,
     title: data.title,
     content: data.content,
-    created_at: data.createdAt,
     image_url: data.imageUrl,
     slug: data.slug,
     user_id: data.userId,

@@ -1,24 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { BlogPost } from "@/lib/definitions";
+import { CreateBlogPost } from "@/lib/definitions";
+import { createBlogPost } from "@/app/posts/actions";
+import { createClient } from "@/lib/supabase/client";
 
 interface PostFormProps {
-  onSubmit: (post: Omit<BlogPost, "id" | "createdAt">) => void;
-  initialPost?: Omit<BlogPost, "id" | "createdAt">;
+  initialPost?: CreateBlogPost;
 }
 
-const PostForm = async ({ onSubmit, initialPost }: PostFormProps) => {
-  const [post, setPost] = useState(
+const PostForm = ({ initialPost }: PostFormProps) => {
+  const [post, setPost] = useState<CreateBlogPost>(
     initialPost || {
       title: "",
       content: "",
       imageUrl: "",
       slug: "",
       tags: [],
-      userId: 0,
+      userId: "",
     }
   );
+  const [slug, setSlug] = useState("");
+
   const [tagsInput, setTagsInput] = useState(
     initialPost?.tags.join(", ") || ""
   );
@@ -31,25 +34,33 @@ const PostForm = async ({ onSubmit, initialPost }: PostFormProps) => {
       ...prevPost,
       [name]: value,
     }));
+    if (name === "title" && post.title.length > 0) {
+      setSlug((_prev) =>
+        post.title.toLowerCase().replaceAll(/[^a-zA-Z0-9]/g, "-")
+      );
+    }
   };
 
   const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagsInput(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const tags = tagsInput
-      .split(",")
-      .map((tag) => tag.trim())
-      .filter((tag) => tag);
+    const supabase = createClient();
+    const userRes = await supabase.auth.getUser();
+    const authUser = userRes.data.user;
 
-    const slug = post.title
-      .toLowerCase()
-      .replaceAll(".", "")
-      .replaceAll(/[ -]/g, "-");
+    const tags = tagsInput.split(",").map((tag) => tag.trim());
 
-    onSubmit({ ...post, tags, slug, userId: "" });
+    if (authUser) {
+      post.tags.push(...tags);
+      post.slug = slug;
+      post.userId = authUser.id;
+      console.log(`Submitting post created by ${authUser?.email}:`, post);
+      // Here you would typically call an API to save the post
+      await createBlogPost(post);
+    }
   };
 
   return (

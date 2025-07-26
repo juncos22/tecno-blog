@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileMenu } from "@/components/profile-menu/profile-menu";
-import { type UserResponse } from "@supabase/supabase-js";
+import { type User } from "@supabase/supabase-js";
 
 type NavbarProps = {
-  userResponse: UserResponse;
+  authUser: User | null;
 };
-const Navbar = ({ userResponse }: NavbarProps) => {
+const Navbar = ({ authUser }: NavbarProps) => {
   return (
     <nav className="bg-zinc-950/50 backdrop-blur-lg sticky top-0 z-50 border-b border-zinc-800/50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,7 +45,7 @@ const Navbar = ({ userResponse }: NavbarProps) => {
               >
                 Contacto
               </Link>
-              {!userResponse.data.user ? (
+              {!authUser ? (
                 <Link
                   href="/auth/login"
                   className="text-zinc-300 hover:bg-zinc-800/50 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
@@ -53,7 +53,7 @@ const Navbar = ({ userResponse }: NavbarProps) => {
                   Iniciar Sesion
                 </Link>
               ) : (
-                <ProfileMenu user={userResponse.data.user} />
+                <ProfileMenu user={authUser} />
               )}
             </div>
           </div>

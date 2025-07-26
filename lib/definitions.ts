@@ -9,23 +9,29 @@
  * tags: json,
  */
 export interface BlogPost {
-  id: number;
+  id: string;
   title: string;
   content: string;
-  createdAt: string;
   imageUrl: string;
   slug: string;
   userId: string;
   tags: string[];
+  createdAt: string;
+  updatedAt?: string; // Optional field for future updates
 }
 
+export type CreateBlogPost = Omit<BlogPost, "id" | "createdAt">;
+
 export type BlogPostFromDB = {
-  id: number;
-  created_at: string;
+  id: string;
   title: string;
   content: string;
   image_url: string;
   slug: string;
   user_id: string;
   tags: string[] | null;
+  created_at: string;
+  updated_at?: string | null; // Optional field for future updates
 };
+
+export type CreateBlogPostFromDB = Omit<BlogPostFromDB, "id" | "created_at">;

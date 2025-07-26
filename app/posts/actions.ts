@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { BlogPost, BlogPostFromDB } from "@/lib/definitions";
+import { BlogPost, BlogPostFromDB, CreateBlogPost } from "@/lib/definitions";
 import { revalidatePath } from "next/cache";
 import { parseBlogPost, parseBlogPosts, parseDbPost } from "@/lib/helpers";
 import { redirect } from "next/navigation";
@@ -32,24 +32,21 @@ export async function getBlogPostBySlug(slug: string) {
   return parseBlogPost(data);
 }
 
-export async function createBlogPost(post: Omit<BlogPost, "id" | "createdAt">) {
+export async function createBlogPost(post: CreateBlogPost) {
   const supabase = await createClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session) {
+  const userRes = await supabase.auth.getUser();
+  const authUser = userRes.data.user;
+
+  console.log("Creating blog post with data:", post);
+
+  if (!authUser) {
     redirect("/auth/login");
   }
-  const dbPost = parseDbPost({
-    id: 0,
-    createdAt: new Date().toDateString(),
-    ...post,
-    userId: session.user.id,
-  });
+  const dbPost = parseDbPost(post);
   const { data, error } = await supabase.from("blog_post").insert([dbPost]);
   if (error) {
     console.error("Error creating blog post:", error);
-    return null;
+    throw new Error(error.message);
   }
   revalidatePath("/posts");
   return data;
