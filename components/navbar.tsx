@@ -30,7 +30,7 @@ const Navbar = ({ authUser }: NavbarProps) => {
               />
             </Link>
           </div>
-          <div className="hidden ml-10 md:flex items-baseline space-x-4">
+          <div className="hidden ml-10 md:flex items-center space-x-4">
             <Link
               href="/"
               className="text-zinc-300 hover:bg-zinc-800/50 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
@@ -49,7 +49,9 @@ const Navbar = ({ authUser }: NavbarProps) => {
             >
               Contacto
             </Link>
-            {!authUser && (
+            {authUser ? (
+              <ProfileMenu user={authUser} />
+            ) : (
               <Link
                 href="/auth/login"
                 className="text-zinc-300 hover:bg-zinc-800/50 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
@@ -58,7 +60,7 @@ const Navbar = ({ authUser }: NavbarProps) => {
               </Link>
             )}
           </div>
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center gap-4">
             <label className="flex flex-col gap-2 w-8">
               <input
                 className="peer hidden"
@@ -93,13 +95,15 @@ const Navbar = ({ authUser }: NavbarProps) => {
             >
               Contacto
             </Link>
-            {!authUser && (
+            {!authUser ? (
               <Link
                 href="/auth/login"
                 className="text-zinc-300 block hover:bg-zinc-800/50 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
               >
                 Iniciar Sesion
               </Link>
+            ) : (
+              <ProfileMenu user={authUser} />
             )}
           </div>
         </div>

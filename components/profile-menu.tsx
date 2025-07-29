@@ -1,62 +1,100 @@
 "use client";
+
 import { createClient } from "@/lib/supabase/client";
 import { type User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 type ProfileMenuProps = {
   user: User;
 };
+
 export const ProfileMenu = ({ user }: ProfileMenuProps) => {
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
   const logout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/auth/login");
   };
-  /**
-   * Icon classname
-   *   className="group-hover:rounded-lg p-3 bg-transparent hover:bg-[#cc39a4] backdrop-blur-md group-hover:shadow-xl rounded-tl-lg flex justify-center items-center w-full h-full text-[#cc39a4] hover:text-white duration-200"
-   */
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuRef]);
+
+  const userAvatarUrl = user?.user_metadata?.avatar_url || "/profile.jpg";
+  const userName = user?.user_metadata?.full_name || user?.email;
+
   return (
-    <div className="group grid grid-cols-3 gap-0 cursor-pointer hover:gap-2 duration-500 shadow-sm  relative top-5">
-      <h1 className="absolute z-10 duration-200 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          height={24}
-          width={24}
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-          className="w-7 h-7 text-white"
-        >
-          <path
-            d="M5 7h14M5 12h14M5 17h14"
-            strokeWidth={2}
-            strokeLinecap="round"
-            stroke="currentColor"
-          />
-        </svg>
-      </h1>
-      <a href="#">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="icon icon-tabler icons-tabler-outline icon-tabler-user-circle group-hover:rounded-lg p-3 bg-transparent hover:bg-[#cc39a4] backdrop-blur-md group-hover:shadow-xl rounded-tl-lg flex justify-center items-center w-full h-full text-[#cc39a4] hover:text-white duration-200"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-          <path d="M12 10m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-          <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
-        </svg>
-      </a>
+    <div className="relative" ref={menuRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 focus:outline-none cursor-pointer"
+      >
+        <Image
+          src={userAvatarUrl}
+          alt="User avatar"
+          width={40}
+          height={40}
+          className="rounded-full border-2 border-zinc-700 hover:border-pink-500 transition-colors"
+        />
+      </button>
+
+      <div
+        className={`absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-zinc-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transition-all duration-200 ease-out ${
+          isOpen
+            ? "transform opacity-100 scale-100"
+            : "transform opacity-0 scale-95 pointer-events-none"
+        }`}
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="menu-button"
+      >
+        <div className="py-1" role="none">
+          <div className="px-4 py-2 border-b border-zinc-700">
+            <p className="text-sm text-zinc-400">Ingreso como </p>
+            <p className="text-sm font-medium text-white truncate">
+              {userName}
+            </p>
+          </div>
+          <Link
+            href="/profile"
+            className="text-zinc-300 block px-4 py-2 text-sm hover:bg-zinc-800 transition-colors"
+            role="menuitem"
+            onClick={() => setIsOpen(false)}
+          >
+            Mi Perfil
+          </Link>
+          <Link
+            href="/posts/create"
+            className="text-zinc-300 block px-4 py-2 text-sm hover:bg-zinc-800 transition-colors"
+            role="menuitem"
+            onClick={() => setIsOpen(false)}
+          >
+            Crear Publicación
+          </Link>
+          <button
+            onClick={logout}
+            className="w-full text-left text-zinc-300 block px-4 py-2 text-sm hover:bg-zinc-800 transition-colors"
+            role="menuitem"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

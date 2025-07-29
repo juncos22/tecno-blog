@@ -48,8 +48,7 @@ export async function createBlogPost(post: CreateBlogPost) {
     console.error("Error creating blog post:", error);
     throw new Error(error.message);
   }
-  revalidatePath("/posts");
-  return data;
+  redirect("/posts");
 }
 
 export async function updateBlogPost(id: number, post: Partial<BlogPost>) {
