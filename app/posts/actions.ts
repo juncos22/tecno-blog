@@ -10,7 +10,9 @@ export async function getBlogPosts() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("blog_post")
-    .select<"*", BlogPostFromDB>("*");
+    .select<"*", BlogPostFromDB>("*")
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
   if (error) {
     console.error("Error fetching blog posts:", error);
     return null;
@@ -37,13 +39,13 @@ export async function createBlogPost(post: CreateBlogPost) {
   const userRes = await supabase.auth.getUser();
   const authUser = userRes.data.user;
 
-  console.log("Creating blog post with data:", post);
+  // console.log("Creating blog post with data:", post);
 
   if (!authUser) {
     redirect("/auth/login");
   }
   const dbPost = parseDbPost(post);
-  const { data, error } = await supabase.from("blog_post").insert([dbPost]);
+  const { error } = await supabase.from("blog_post").insert([dbPost]);
   if (error) {
     console.error("Error creating blog post:", error);
     throw new Error(error.message);
@@ -51,31 +53,25 @@ export async function createBlogPost(post: CreateBlogPost) {
   redirect("/posts");
 }
 
-export async function updateBlogPost(id: number, post: Partial<BlogPost>) {
+export async function updateBlogPost(id: string, post: Partial<BlogPost>) {
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("blog_post")
-    .update(post)
-    .eq("id", id);
+  const { error } = await supabase.from("blog_post").update(post).eq("id", id);
   if (error) {
     console.error("Error updating blog post:", error);
     return null;
   }
-  revalidatePath("/posts");
-  revalidatePath(`/posts/${post.slug}`);
-  return data;
+  redirect("/posts");
 }
 
-export async function deleteBlogPost(id: number) {
+export async function deleteBlogPost(id: string) {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("blog_post")
-    .delete()
+    .update({ is_active: false })
     .eq("id", id);
   if (error) {
     console.error("Error deleting blog post:", error);
     return null;
   }
-  revalidatePath("/posts");
-  return data;
+  redirect("/posts");
 }

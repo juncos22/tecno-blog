@@ -30,8 +30,10 @@ const FeaturedPostCard = ({ post }: { post: BlogPost }) => {
           <h3 className="text-3xl font-bold text-white mb-2 group-hover:text-teal-400 transition-colors duration-300">
             {post.title}
           </h3>
-          <p className="text-zinc-400 text-base">{post.content}</p>
-          <p className="text-zinc-500 text-sm mt-4">{post.createdAt}</p>
+          {/* <p className="text-zinc-400 text-base">{post.content}</p> */}
+          <p className="text-zinc-500 text-sm mt-4">
+            {new Date(post.createdAt).toLocaleDateString("es-AR")}
+          </p>
         </div>
       </div>
     </Link>

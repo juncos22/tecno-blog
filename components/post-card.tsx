@@ -8,7 +8,7 @@ const PostCard = ({ post }: { post: BlogPost }) => {
       <div className="group rounded-xl overflow-hidden shadow-lg bg-zinc-900/50 border border-zinc-800/50 hover:shadow-xl hover:border-zinc-700/60 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
         <div className="relative w-full h-48">
           <Image
-            src={"/placeholder.jpg"}
+            src={post.imageUrl}
             alt={post.title}
             placeholder={"blur"}
             blurDataURL={"/placeholder.jpg"}
@@ -32,11 +32,11 @@ const PostCard = ({ post }: { post: BlogPost }) => {
           <h3 className="text-xl font-bold text-white mb-2 group-hover:text-teal-400 transition-colors duration-300">
             {post.title}
           </h3>
-          <p className="text-zinc-400 text-base">
+          {/* <p className="text-zinc-400 text-base">
             {post.content.substring(0, 100)}...
-          </p>
+          </p> */}
           <p className="text-zinc-500 text-sm mt-4">
-            {new Date(post.createdAt).toLocaleDateString()}
+            {new Date(post.createdAt).toLocaleDateString("es-AR")}
           </p>
         </div>
       </div>

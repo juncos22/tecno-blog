@@ -1,7 +1,8 @@
 import { FC } from "react";
-import { samplePosts } from "@/mockData/samplePosts";
+// import { samplePosts } from "@/mockData/samplePosts";
 import Image from "next/image";
 import Link from "next/link";
+import { getBlogPostBySlug } from "../actions";
 
 interface PostDetailPageProps {
   params: {
@@ -11,7 +12,7 @@ interface PostDetailPageProps {
 
 const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
   const { slug } = await params;
-  const post = samplePosts.find((p) => p.slug === slug);
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) {
     return (
@@ -37,7 +38,19 @@ const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
             className="rounded-lg object-cover"
           />
         </div>
-        <p className="text-gray-600 mb-4">Publicado el {post.createdAt}</p>
+        <p className="text-gray-600 mb-4">
+          Publicado el{" "}
+          {new Date(post.createdAt).toLocaleDateString("es-AR", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}{" "}
+          a las{" "}
+          {new Date(post.createdAt).toLocaleTimeString("es-AR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
       </article>
       <div className="mt-8">

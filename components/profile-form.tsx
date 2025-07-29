@@ -4,20 +4,42 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { type User } from "@supabase/supabase-js";
 import Image from "next/image";
+import { uploadImage, getImageUrl } from "@/lib/supabase/storage";
 
 export default function ProfileForm({ user }: { user: User }) {
   const [fullName, setFullName] = useState("");
+  const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
       setFullName(user.user_metadata.full_name || "");
       setAvatarUrl(user.user_metadata.avatar_url || "");
+      setPreviewImage(user.user_metadata.avatar_url || null);
+      setBio(user.user_metadata.bio || "");
     }
   }, [user]);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploading(true);
+      setPreviewImage(URL.createObjectURL(file));
+      const imagePath = await uploadImage(file, "profile_avatars");
+
+      if (imagePath) {
+        console.log("Image uploaded to path:", imagePath);
+        const newAvatarUrl = await getImageUrl(imagePath);
+        setAvatarUrl(newAvatarUrl);
+      }
+      setUploading(false);
+    }
+  };
 
   const handleUpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,7 +49,7 @@ export default function ProfileForm({ user }: { user: User }) {
 
     const supabase = createClient();
     const { data, error } = await supabase.auth.updateUser({
-      data: { full_name: fullName, avatar_url: avatarUrl },
+      data: { full_name: fullName, avatar_url: avatarUrl, bio: bio },
     });
 
     if (error) {
@@ -42,7 +64,7 @@ export default function ProfileForm({ user }: { user: User }) {
     <div className="max-w-lg mx-auto bg-zinc-900/50 p-8 rounded-lg shadow-lg border border-zinc-800/50">
       <div className="flex flex-col items-center mb-6">
         <Image
-          src={avatarUrl || "/profile.jpg"}
+          src={previewImage || "/profile.jpg"}
           alt="User avatar"
           width={120}
           height={120}
@@ -59,38 +81,56 @@ export default function ProfileForm({ user }: { user: User }) {
             htmlFor="fullName"
             className="block text-sm font-medium text-zinc-300"
           >
-            Nombre Completo
+            Full Name
           </label>
           <input
             id="fullName"
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="mt-1 block w-full bg-zinc-800 border border-zinc-700 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="mt-1 block w-full bg-zinc-800 border border-zinc-700 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
           />
         </div>
         <div>
           <label
-            htmlFor="avatarUrl"
+            htmlFor="bio"
             className="block text-sm font-medium text-zinc-300"
           >
-            Avatar URL
+            Bio
           </label>
           <input
-            id="avatarUrl"
+            id="bio"
             type="text"
-            value={avatarUrl}
-            onChange={(e) => setAvatarUrl(e.target.value)}
-            className="mt-1 block w-full bg-zinc-800 border border-zinc-700 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+            className="mt-1 block w-full bg-zinc-800 border border-zinc-700 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
           />
+        </div>
+        <div>
+          <label
+            htmlFor="avatar"
+            className="block text-sm font-medium text-zinc-300"
+          >
+            Avatar
+          </label>
+          <input
+            id="avatar"
+            type="file"
+            onChange={handleImageUpload}
+            accept="image/*"
+            className="mt-1 block w-full text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-pink-600/20 file:text-pink-300 hover:file:bg-pink-600/30"
+          />
+          {uploading && (
+            <p className="text-sm text-zinc-400 mt-2">Uploading...</p>
+          )}
         </div>
         <div>
           <button
             type="submit"
-            disabled={loading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 cursor-pointer"
+            disabled={loading || uploading}
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50"
           >
-            {loading ? "Guardando Datos..." : "Actualizar Perfil"}
+            {loading ? "Updating..." : "Update Profile"}
           </button>
         </div>
       </form>
