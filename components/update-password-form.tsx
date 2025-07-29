@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -36,7 +35,7 @@ export function UpdatePasswordForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="flex flex-col gap-6" {...props}>
       <div>
         <div>
           <h1 className="text-2xl">Resetea tu Contraseña</h1>
@@ -46,11 +45,11 @@ export function UpdatePasswordForm({
           <form onSubmit={handleForgotPassword}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <label htmlFor="password">New password</label>
+                <label htmlFor="password">Nueva Contraseña</label>
                 <input
                   id="password"
                   type="password"
-                  placeholder="New password"
+                  placeholder="Nueva Contraseña"
                   required
                   value={password}
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-zinc-700 bg-zinc-800/50 placeholder-zinc-400 text-white rounded-t-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm"

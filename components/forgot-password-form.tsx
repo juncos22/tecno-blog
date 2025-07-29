@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useState } from "react";
@@ -35,7 +34,7 @@ export function ForgotPasswordForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="flex flex-col gap-6" {...props}>
       {success ? (
         <div>
           <div>
