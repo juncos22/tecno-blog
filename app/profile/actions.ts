@@ -17,11 +17,13 @@ export async function getPostsByUserId() {
   const { data, error } = await supabase
     .from("blog_post")
     .select<"*", BlogPostFromDB>("*")
-    .eq("user_id", authUser.id);
+    .eq("user_id", authUser.id)
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching blog posts:", error);
-    return null;
+    throw new Error(error.message);
   }
   return parseBlogPosts(data);
 }

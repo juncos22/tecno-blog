@@ -1,8 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { BlogPost, BlogPostFromDB, CreateBlogPost } from "@/lib/definitions";
-import { revalidatePath } from "next/cache";
+import { BlogPostFromDB, CreateBlogPost } from "@/lib/definitions";
 import { parseBlogPost, parseBlogPosts, parseDbPost } from "@/lib/helpers";
 import { redirect } from "next/navigation";
 
@@ -50,17 +49,27 @@ export async function createBlogPost(post: CreateBlogPost) {
     console.error("Error creating blog post:", error);
     throw new Error(error.message);
   }
-  redirect("/posts");
+  return true; // Indicate success
 }
 
-export async function updateBlogPost(id: string, post: Partial<BlogPost>) {
+export async function updateBlogPost(id: string, post: CreateBlogPost) {
   const supabase = await createClient();
-  const { error } = await supabase.from("blog_post").update(post).eq("id", id);
-  if (error) {
-    console.error("Error updating blog post:", error);
-    return null;
+
+  let dbPost = parseDbPost(post);
+  console.log("Updating blog post with data:", dbPost);
+
+  if (dbPost) {
+    const { error } = await supabase
+      .from("blog_post")
+      .update({ ...dbPost, updated_at: new Date().toUTCString() })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error updating blog post:", error);
+      throw new Error(error.message);
+    }
   }
-  redirect("/posts");
+  return true; // Indicate success
 }
 
 export async function deleteBlogPost(id: string) {
@@ -71,7 +80,7 @@ export async function deleteBlogPost(id: string) {
     .eq("id", id);
   if (error) {
     console.error("Error deleting blog post:", error);
-    return null;
+    throw new Error(error.message);
   }
   redirect("/posts");
 }

@@ -38,6 +38,7 @@ export const parseBlogPost = (data: BlogPostFromDB | null): BlogPost | null => {
     title: data.title,
     content: data.content,
     createdAt: data.created_at,
+    updatedAt: data.updated_at || undefined, // Handle optional updated_at
     imageUrl: data.image_url,
     slug: data.slug,
     userId: data.user_id,
@@ -58,6 +59,8 @@ export const parseDbPost = (
     image_url: data.imageUrl,
     slug: data.slug,
     user_id: data.userId,
-    tags: data.tags || [], // Ensure tags is always an array
+    tags: data.tags || [], // Ensure tags is always an array,
+    created_at: data.createdAt,
+    updated_at: data.updatedAt,
   };
 };

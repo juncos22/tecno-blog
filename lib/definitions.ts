@@ -20,7 +20,7 @@ export interface BlogPost {
   updatedAt?: string; // Optional field for future updates
 }
 
-export type CreateBlogPost = Omit<BlogPost, "id" | "createdAt">;
+export type CreateBlogPost = Omit<BlogPost, "id">;
 
 export type BlogPostFromDB = {
   id: string;
@@ -34,4 +34,4 @@ export type BlogPostFromDB = {
   updated_at?: string | null; // Optional field for future updates
 };
 
-export type CreateBlogPostFromDB = Omit<BlogPostFromDB, "id" | "created_at">;
+export type CreateBlogPostFromDB = Omit<BlogPostFromDB, "id">;

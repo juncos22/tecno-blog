@@ -18,9 +18,9 @@ const FeaturedPostCard = ({ post }: { post: BlogPost }) => {
         </div>
         <div className="p-6">
           <div className="flex items-center mb-3">
-            {post.tags.map((tag) => (
+            {post.tags.map((tag, i) => (
               <span
-                key={tag}
+                key={i}
                 className="inline-block bg-teal-500/10 text-teal-400 rounded-full px-3 py-1 text-xs font-semibold mr-2"
               >
                 {tag}

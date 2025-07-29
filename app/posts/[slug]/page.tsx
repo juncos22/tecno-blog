@@ -1,8 +1,9 @@
 import { FC } from "react";
-// import { samplePosts } from "@/mockData/samplePosts";
 import Image from "next/image";
 import Link from "next/link";
 import { getBlogPostBySlug } from "../actions";
+import DeletePostButton from "@/components/delete-post-button";
+import { createClient } from "@/lib/supabase/server";
 
 interface PostDetailPageProps {
   params: {
@@ -13,6 +14,8 @@ interface PostDetailPageProps {
 const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
+  const userResponse = await (await createClient()).auth.getUser();
+  const authUser = userResponse.data.user;
 
   if (!post) {
     return (
@@ -51,12 +54,39 @@ const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
             minute: "2-digit",
           })}
         </p>
+        {post.updatedAt && (
+          <p className="text-gray-600 mb-4">
+            Actualizado el{" "}
+            {new Date(post.updatedAt).toLocaleDateString("es-AR", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}{" "}
+            a las{" "}
+            {new Date(post.updatedAt).toLocaleTimeString("es-AR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </p>
+        )}
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
       </article>
-      <div className="mt-8">
+      <div className="mt-8 flex justify-between items-center">
         <Link href={"/posts"} className="text-blue-500 hover:underline">
           &larr; Volver al inicio
         </Link>
+        <div className="flex items-center space-x-4">
+          <Link
+            href={`/posts/edit/${post.slug}`}
+            className="text-yellow-500 hover:underline"
+          >
+            Editar Post
+          </Link>
+          {authUser &&
+            post.userId === authUser.id && ( // Replace with actual user ID check
+              <DeletePostButton postId={post.id} />
+            )}
+        </div>
       </div>
     </div>
   );

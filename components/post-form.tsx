@@ -1,28 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { CreateBlogPost } from "@/lib/definitions";
-import { createBlogPost } from "@/app/posts/actions";
-import { createClient } from "@/lib/supabase/client";
+import { BlogPost, CreateBlogPost } from "@/lib/definitions";
+import { createBlogPost, updateBlogPost } from "@/app/posts/actions";
 import { uploadImage, getImageUrl } from "@/lib/supabase/storage";
 import Image from "next/image";
 
 interface PostFormProps {
-  initialPost?: CreateBlogPost;
+  initialPost?: BlogPost;
+  onCreated?: (result: boolean) => void;
+  onUpdated?: (result: boolean) => void;
 }
 
-const PostForm = ({ initialPost }: PostFormProps) => {
-  const [post, setPost] = useState<CreateBlogPost>(
+const PostForm = ({ initialPost, onCreated, onUpdated }: PostFormProps) => {
+  const [post, setPost] = useState<Partial<BlogPost>>(
     initialPost || {
       title: "",
       content: "",
       imageUrl: "",
       slug: "",
       tags: [],
-      userId: "",
     }
   );
-  const [slug, setSlug] = useState("");
+  const [slug, setSlug] = useState(initialPost?.slug || "");
   const [tagsInput, setTagsInput] = useState(
     initialPost?.tags.join(", ") || ""
   );
@@ -39,8 +39,8 @@ const PostForm = ({ initialPost }: PostFormProps) => {
       ...prevPost,
       [name]: value,
     }));
-    if (name === "title" && post.title.length > 0) {
-      setSlug(post.title.toLowerCase().replaceAll(/[^a-zA-Z0-9]/g, "-"));
+    if (name === "title" && !initialPost) {
+      setSlug(value.toLowerCase().replaceAll(/[^a-zA-Z0-9]/g, "-"));
     }
   };
 
@@ -67,17 +67,15 @@ const PostForm = ({ initialPost }: PostFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const supabase = createClient();
-    const userRes = await supabase.auth.getUser();
-    const authUser = userRes.data.user;
-
     const tags = tagsInput.split(",").map((tag) => tag.trim());
+    const finalPost = { ...post, tags, slug };
 
-    if (authUser) {
-      post.tags = tags;
-      post.slug = slug;
-      post.userId = authUser.id;
-      await createBlogPost(post);
+    if (initialPost?.id) {
+      let result = await updateBlogPost(initialPost.id, finalPost as CreateBlogPost);
+      if (onUpdated) onUpdated(result);
+    } else {
+      let result = await createBlogPost(finalPost as CreateBlogPost);
+      if (onCreated) onCreated(result);
     }
   };
 
@@ -174,7 +172,7 @@ const PostForm = ({ initialPost }: PostFormProps) => {
           disabled={uploading}
           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50"
         >
-          {uploading ? "Saving..." : "Save Post"}
+          {uploading ? "Saving..." : initialPost ? "Update Post" : "Save Post"}
         </button>
       </div>
     </form>
