@@ -13,7 +13,11 @@ const DeletePostButton = ({ postId }: DeletePostButtonProps) => {
 
   const handleDelete = async () => {
     startTransition(async () => {
-      await deleteBlogPost(postId);
+      try {
+        await deleteBlogPost(postId);
+      } catch (error: any) {
+        console.log(error);
+      }
     });
   };
 

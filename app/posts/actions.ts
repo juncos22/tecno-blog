@@ -14,7 +14,7 @@ export async function getBlogPosts() {
     .order("created_at", { ascending: false });
   if (error) {
     console.error("Error fetching blog posts:", error);
-    return null;
+    throw new Error(error.message);
   }
   return parseBlogPosts(data);
 }
@@ -28,7 +28,7 @@ export async function getBlogPostBySlug(slug: string) {
     .single<BlogPostFromDB>();
   if (error) {
     console.error("Error fetching blog post by slug:", error);
-    return null;
+    throw new Error(error.message);
   }
   return parseBlogPost(data);
 }
@@ -82,5 +82,5 @@ export async function deleteBlogPost(id: string) {
     console.error("Error deleting blog post:", error);
     throw new Error(error.message);
   }
-  redirect("/posts");
+  return true;
 }

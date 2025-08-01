@@ -60,7 +60,7 @@ export const parseDbPost = (
     slug: data.slug,
     user_id: data.userId,
     tags: data.tags || [], // Ensure tags is always an array,
-    created_at: data.createdAt,
+    created_at: data.createdAt ?? new Date().toUTCString(),
     updated_at: data.updatedAt,
   };
 };

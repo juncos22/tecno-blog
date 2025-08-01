@@ -8,9 +8,10 @@ interface AlertProps {
   onClose?: () => void;
   duration?: number; // Optional duration in ms to auto-close
 }
+export type AlertData = Omit<AlertProps, "onClose" | "duration">;
 
 const Alert = ({ type, message, onClose, duration }: AlertProps) => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(true); 
 
   useEffect(() => {
     if (duration) {

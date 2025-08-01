@@ -4,13 +4,13 @@ import { nanoid } from "nanoid";
 
 export async function uploadImage(file: File, folderName: string) {
   const supabase = await createClient();
-  const filename = `${nanoid()}.${file.type.split("/")[1]}`;
+  const filename = `${nanoid()}.${file.type.split("/")[1]}`; //TODO: Cambiar por el id de la publicación o el usuario para mayor facilidad de acceso y modificación.
 
   const { data, error } = await supabase.storage
     .from("tecno-blog-bucket")
     .upload(`${folderName}/${filename}`, file, {
       cacheControl: "3600",
-      upsert: false,
+      upsert: true,
     });
 
   if (error) {

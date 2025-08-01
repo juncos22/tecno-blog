@@ -16,9 +16,9 @@ const PostEditPage: FC<PostEditPageProps> = async ({ params }) => {
   if (!post) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-4xl font-bold mb-4">Post not found</h1>
+        <h1 className="text-4xl font-bold mb-4">Publicacion no encontrada</h1>
         <Link href="/posts" className="text-teal-500 hover:underline">
-          Return to posts
+          Volver atrás
         </Link>
       </div>
     );
@@ -27,7 +27,7 @@ const PostEditPage: FC<PostEditPageProps> = async ({ params }) => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8 text-center text-white">
-        Edit Post
+        Modificar Publicación
       </h1>
       <PostForm initialPost={post} />
     </div>

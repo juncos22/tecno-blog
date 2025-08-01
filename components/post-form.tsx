@@ -5,14 +5,14 @@ import { BlogPost, CreateBlogPost } from "@/lib/definitions";
 import { createBlogPost, updateBlogPost } from "@/app/posts/actions";
 import { uploadImage, getImageUrl } from "@/lib/supabase/storage";
 import Image from "next/image";
+import Alert, { AlertData } from "@/components/alert";
+import { createClient } from "@/lib/supabase/client";
 
 interface PostFormProps {
   initialPost?: BlogPost;
-  onCreated?: (result: boolean) => void;
-  onUpdated?: (result: boolean) => void;
 }
 
-const PostForm = ({ initialPost, onCreated, onUpdated }: PostFormProps) => {
+const PostForm = ({ initialPost }: PostFormProps) => {
   const [post, setPost] = useState<Partial<BlogPost>>(
     initialPost || {
       title: "",
@@ -30,6 +30,7 @@ const PostForm = ({ initialPost, onCreated, onUpdated }: PostFormProps) => {
   const [previewImage, setPreviewImage] = useState<string | null>(
     initialPost?.imageUrl || null
   );
+  const [alertData, setAlertData] = useState<AlertData | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -67,15 +68,36 @@ const PostForm = ({ initialPost, onCreated, onUpdated }: PostFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     const tags = tagsInput.split(",").map((tag) => tag.trim());
-    const finalPost = { ...post, tags, slug };
+    const finalPost = { ...post, tags, slug, userId: user?.id };
+    // console.log(finalPost);
 
-    if (initialPost?.id) {
-      let result = await updateBlogPost(initialPost.id, finalPost as CreateBlogPost);
-      if (onUpdated) onUpdated(result);
-    } else {
-      let result = await createBlogPost(finalPost as CreateBlogPost);
-      if (onCreated) onCreated(result);
+    try {
+      if (initialPost?.id) {
+        let result = await updateBlogPost(
+          initialPost.id,
+          finalPost as CreateBlogPost
+        );
+        setAlertData({
+          type: result ? "success" : "error",
+          message: "Publicacion actualizada con exito!",
+        });
+      } else {
+        let result = await createBlogPost(finalPost as CreateBlogPost);
+        setAlertData({
+          type: result ? "success" : "error",
+          message: "Publicacion creada con exito!",
+        });
+      }
+    } catch (error: any) {
+      setAlertData({
+        type: "error",
+        message: error.message,
+      });
     }
   };
 
@@ -89,7 +111,7 @@ const PostForm = ({ initialPost, onCreated, onUpdated }: PostFormProps) => {
           htmlFor="title"
           className="block text-sm font-medium text-zinc-300"
         >
-          Title
+          Titulo
         </label>
         <input
           type="text"
@@ -107,7 +129,7 @@ const PostForm = ({ initialPost, onCreated, onUpdated }: PostFormProps) => {
           htmlFor="image"
           className="block text-sm font-medium text-zinc-300"
         >
-          Post Image
+          Portada de la publicación
         </label>
         <div className="mt-1 flex items-center space-x-4">
           {previewImage && (
@@ -129,7 +151,7 @@ const PostForm = ({ initialPost, onCreated, onUpdated }: PostFormProps) => {
           />
         </div>
         {uploading && (
-          <p className="text-sm text-zinc-400 mt-2">Uploading...</p>
+          <p className="text-sm text-zinc-400 mt-2">Subiendo imagen...</p>
         )}
       </div>
 
@@ -138,7 +160,7 @@ const PostForm = ({ initialPost, onCreated, onUpdated }: PostFormProps) => {
           htmlFor="content"
           className="block text-sm font-medium text-zinc-300"
         >
-          Content
+          Contenido
         </label>
         <textarea
           name="content"
@@ -155,7 +177,7 @@ const PostForm = ({ initialPost, onCreated, onUpdated }: PostFormProps) => {
           htmlFor="tags"
           className="block text-sm font-medium text-zinc-300"
         >
-          Tags (comma-separated)
+          Tags (separados por coma)
         </label>
         <input
           type="text"
@@ -172,9 +194,20 @@ const PostForm = ({ initialPost, onCreated, onUpdated }: PostFormProps) => {
           disabled={uploading}
           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50"
         >
-          {uploading ? "Saving..." : initialPost ? "Update Post" : "Save Post"}
+          {uploading
+            ? "Guardando..."
+            : initialPost
+            ? "Actualizar Publicación"
+            : "Guardar Publicación"}
         </button>
       </div>
+      {alertData && (
+        <Alert
+          type={alertData.type}
+          message={alertData.message}
+          onClose={() => setAlertData(null)}
+        />
+      )}
     </form>
   );
 };
