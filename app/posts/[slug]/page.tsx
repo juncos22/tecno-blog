@@ -76,15 +76,17 @@ const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
           &larr; Volver al inicio
         </Link>
         <div className="flex items-center space-x-4">
-          <Link
-            href={`/posts/edit/${post.slug}`}
-            className="text-yellow-500 hover:underline"
-          >
-            Editar Post
-          </Link>
           {authUser &&
             post.userId === authUser.id && ( // Replace with actual user ID check
-              <DeletePostButton postId={post.id} />
+              <>
+                <Link
+                  href={`/posts/edit/${post.slug}`}
+                  className="text-yellow-500 hover:underline"
+                >
+                  Editar Post
+                </Link>
+                <DeletePostButton postId={post.id} />
+              </>
             )}
         </div>
       </div>
