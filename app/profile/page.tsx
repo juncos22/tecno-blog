@@ -34,7 +34,9 @@ export default async function ProfilePage() {
             </div>
           ) : (
             <div className="text-center text-zinc-400 bg-zinc-900/50 p-8 rounded-lg border border-zinc-800/50">
-              <h3 className="text-xl font-semibold text-white">No posts yet</h3>
+              <h3 className="text-xl font-semibold text-white">
+                Sin publicaciones aún.
+              </h3>
               <p className="mt-2">
                 No tenés ninguna publicación creada aun, empezá creando una
                 ahora!

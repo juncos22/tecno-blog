@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { deleteBlogPost } from "@/app/posts/actions";
+import { useRouter } from "next/navigation";
 
 interface DeletePostButtonProps {
   postId: string;
@@ -10,11 +11,16 @@ interface DeletePostButtonProps {
 const DeletePostButton = ({ postId }: DeletePostButtonProps) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleDelete = async () => {
     startTransition(async () => {
       try {
-        await deleteBlogPost(postId);
+        let result = await deleteBlogPost(postId);
+        if (result) {
+          setShowConfirm(false);
+          router.push("/posts");
+        }
       } catch (error: any) {
         console.log(error);
       }

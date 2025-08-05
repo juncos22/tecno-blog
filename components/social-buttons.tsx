@@ -5,53 +5,36 @@ import GitHub from "@/components/icons/github";
 import {createClient} from "@/lib/supabase/client";
 import {useState} from "react";
 import Alert, {AlertData} from "@/components/alert";
+import {Provider} from "@supabase/supabase-js";
 
 const SocialButtons = () => {
     const [alertData, setAlertData] = useState<AlertData | null>(null);
 
-    const handleGoogleLogin = async () => {
+    const handleOAuthLogin = async (provider: Provider) => {
         try {
             const supabase = createClient();
             const {data, error} = await supabase.auth.signInWithOAuth({
-                provider: 'google',
+                provider,
                 options: {
-                    redirectTo: `${window.location.origin}/posts`,
+                    redirectTo: `${window.location.origin}/auth/confirm`,
                 }
             })
             if (error) {
                 setAlertData({type: 'error', message: 'Error al intentar iniciar sesión'});
                 return;
             }
-            console.log("Google Login:", data);
+            console.log("OAuth Login:", data);
         } catch (error: any) {
             console.log(error);
             setAlertData({type: 'error', message: error.message});
         }
     }
-    const handleGithubLogin = async () => {
-        try {
-            const supabase = createClient();
-            const {data, error} = await supabase.auth.signInWithOAuth({
-                provider: 'github',
-                options: {
-                    redirectTo: `${window.location.origin}/posts`,
-                }
-            })
-            if (error) {
-                setAlertData({type: 'error', message: 'Error al intentar iniciar sesión'});
-                return;
-            }
-            console.log("Github Login:", data);
-        } catch (error: any) {
-            console.log(error);
-            setAlertData({type: 'error', message: error.message});
-        }
-    }
+
     return (
         <div className={'flex flex-col items-center justify-center gap-y-2'}>
             <div className={'flex items-center justify-center gap-x-2 my-2'}>
                 <button
-                    onClick={handleGoogleLogin}
+                    onClick={() => handleOAuthLogin('google')}
                     className="p-5 rounded-full backdrop-blur-lg border border-white/10 bg-gradient-to-tr
                 from-black/60 to-black/40 shadow-lg hover:shadow-2xl hover:shadow-white/20
                  hover:scale-110 hover:rotate-3 active:scale-95 active:rotate-0 transition-all
@@ -87,7 +70,7 @@ const SocialButtons = () => {
                 </button>
 
                 <button
-                    onClick={handleGithubLogin}
+                    onClick={() => handleOAuthLogin('github')}
                     className="p-5 rounded-full backdrop-blur-lg border border-indigo-500/20 bg-gradient-to-tr
                 from-black/60 to-black/40 shadow-lg hover:shadow-2xl hover:shadow-indigo-500/30 hover:scale-110
                 hover:-rotate-2 active:scale-95 active:rotate-0 transition-all duration-300 ease-out cursor-pointer

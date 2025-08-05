@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { type User } from "@supabase/supabase-js";
-import Image from "next/image";
 import { uploadImage, getImageUrl } from "@/lib/supabase/storage";
+import { useRouter } from "next/navigation";
 
 export default function ProfileForm({ user }: { user: User }) {
   const [fullName, setFullName] = useState("");
@@ -15,7 +15,7 @@ export default function ProfileForm({ user }: { user: User }) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-
+  const router = useRouter();
   useEffect(() => {
     if (user) {
       setFullName(user.user_metadata.full_name || "");
@@ -48,22 +48,26 @@ export default function ProfileForm({ user }: { user: User }) {
     setError("");
 
     const supabase = createClient();
-    const { data, error } = await supabase.auth.updateUser({
+    const { error } = await supabase.auth.updateUser({
       data: { full_name: fullName, avatar_url: avatarUrl, bio: bio },
     });
 
     if (error) {
-      setError("Error updating profile: " + error.message);
+      setError("Error actualizando su perfil: " + error.message);
     } else {
-      setMessage("Profile updated successfully!");
+      setMessage("Perfil actualizado con exito!");
     }
     setLoading(false);
+    setTimeout(() => {
+      setMessage("");
+      router.refresh();
+    }, 3000);
   };
 
   return (
     <div className="max-w-lg mx-auto bg-zinc-900/50 p-8 rounded-lg shadow-lg border border-zinc-800/50">
       <div className="flex flex-col items-center mb-6">
-        <Image
+        <img
           src={previewImage || "/profile.jpg"}
           alt="User avatar"
           width={120}
@@ -81,14 +85,14 @@ export default function ProfileForm({ user }: { user: User }) {
             htmlFor="fullName"
             className="block text-sm font-medium text-zinc-300"
           >
-            Full Name
+            Nombre Completo
           </label>
           <input
             id="fullName"
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="mt-1 block w-full bg-zinc-800 border border-zinc-700 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+            className="mt-1 block w-full bg-zinc-800 border border-zinc-700 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div>
@@ -98,12 +102,13 @@ export default function ProfileForm({ user }: { user: User }) {
           >
             Bio
           </label>
-          <input
+          <textarea
             id="bio"
-            type="text"
+            rows={4}
             value={bio}
+            maxLength={50}
             onChange={(e) => setBio(e.target.value)}
-            className="mt-1 block w-full bg-zinc-800 border border-zinc-700 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+            className="mt-1 block w-full bg-zinc-800 border border-zinc-700 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div>
@@ -118,7 +123,7 @@ export default function ProfileForm({ user }: { user: User }) {
             type="file"
             onChange={handleImageUpload}
             accept="image/*"
-            className="mt-1 block w-full text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-pink-600/20 file:text-pink-300 hover:file:bg-pink-600/30"
+            className="mt-1 block w-full text-sm text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-600/20 file:text-pink-300 hover:file:bg-indigo-600/30"
           />
           {uploading && (
             <p className="text-sm text-zinc-400 mt-2">Uploading...</p>
@@ -128,9 +133,9 @@ export default function ProfileForm({ user }: { user: User }) {
           <button
             type="submit"
             disabled={loading || uploading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
           >
-            {loading ? "Updating..." : "Update Profile"}
+            {loading ? "Actualizando perfil..." : "Actualizar Perfil"}
           </button>
         </div>
       </form>

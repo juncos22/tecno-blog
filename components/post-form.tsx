@@ -7,12 +7,14 @@ import { uploadImage, getImageUrl } from "@/lib/supabase/storage";
 import Image from "next/image";
 import Alert, { AlertData } from "@/components/alert";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 interface PostFormProps {
   initialPost?: BlogPost;
 }
 
 const PostForm = ({ initialPost }: PostFormProps) => {
+  const router = useRouter();
   const [post, setPost] = useState<Partial<BlogPost>>(
     initialPost || {
       title: "",
@@ -93,6 +95,10 @@ const PostForm = ({ initialPost }: PostFormProps) => {
           message: "Publicacion creada con exito!",
         });
       }
+      setTimeout(() => {
+        setAlertData(null);
+        router.push("/posts");
+      }, 3000);
     } catch (error: any) {
       setAlertData({
         type: "error",

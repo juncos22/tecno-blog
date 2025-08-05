@@ -10,7 +10,7 @@ export async function uploadImage(file: File, folderName: string) {
     .from("tecno-blog-bucket")
     .upload(`${folderName}/${filename}`, file, {
       cacheControl: "3600",
-      upsert: true,
+      upsert: false,
     });
 
   if (error) {

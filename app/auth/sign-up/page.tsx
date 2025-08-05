@@ -1,5 +1,6 @@
 import { SignUpForm } from "@/components/sign-up-form";
 import Link from "next/link";
+import SocialButtons from "@/components/social-buttons";
 
 export default function Page() {
   return (
@@ -11,11 +12,12 @@ export default function Page() {
           </h2>
         </div>
         <SignUpForm />
+        <SocialButtons />
         <div className="text-sm text-center">
           <p className="text-zinc-400">
             Ya posee una cuenta?{" "}
             <Link
-              href="/login"
+              href="/auth/login"
               className="font-medium text-teal-500 hover:text-teal-400"
             >
               Ingrese
