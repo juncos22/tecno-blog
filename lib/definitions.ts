@@ -18,9 +18,17 @@ export interface BlogPost {
   tags: string[];
   createdAt: string;
   updatedAt?: string; // Optional field for future updates
+  user: User;
 }
 
 export type CreateBlogPost = Omit<BlogPost, "id">;
+
+export type User = {
+  id: string;
+  name: string;
+  user_name?: string;
+  avatar_url: string;
+};
 
 export type BlogPostFromDB = {
   id: string;
@@ -32,6 +40,7 @@ export type BlogPostFromDB = {
   tags: string[] | null;
   created_at: string;
   updated_at?: string | null; // Optional field for future updates
+  user: User;
 };
 
-export type CreateBlogPostFromDB = Omit<BlogPostFromDB, "id">;
+export type CreateBlogPostFromDB = Omit<BlogPostFromDB, "id" | "user">;

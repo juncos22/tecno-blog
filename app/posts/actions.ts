@@ -5,13 +5,21 @@ import { BlogPostFromDB, CreateBlogPost } from "@/lib/definitions";
 import { parseBlogPost, parseBlogPosts, parseDbPost } from "@/lib/helpers";
 import { redirect } from "next/navigation";
 
-export async function getBlogPosts() {
+export async function getBlogPosts(query?: string) {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  let supabaseQuery = supabase
     .from("blog_post")
-    .select<"*", BlogPostFromDB>("*")
+    .select<"*", BlogPostFromDB>("*,user:users(*)")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
+
+  if (query) {
+    supabaseQuery = supabaseQuery.or(
+      `title.ilike.%${query}%,content.ilike.%${query}%`
+    );
+  }
+
+  const { data, error } = await supabaseQuery;
   if (error) {
     console.error("Error fetching blog posts:", error);
     throw new Error(error.message);
@@ -23,7 +31,7 @@ export async function getBlogPostBySlug(slug: string) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("blog_post")
-    .select("*")
+    .select("*,user:users(*)")
     .eq("slug", slug)
     .single<BlogPostFromDB>();
   if (error) {

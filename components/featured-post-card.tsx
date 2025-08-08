@@ -1,21 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 import { BlogPost } from "@/lib/definitions";
 
 const FeaturedPostCard = ({ post }: { post: BlogPost }) => {
   return (
     <Link href={`/posts/${post.slug}`}>
-      <div className="group rounded-xl overflow-hidden shadow-lg bg-zinc-900/50 border border-zinc-800/50 hover:shadow-xl hover:border-zinc-700/60 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
-        <div className="relative w-full h-96">
-          <Image
-            src={post.imageUrl}
-            alt={post.title}
-            width={1500}
-            height={500}
-            priority
-            className="transition-transform duration-300 ease-in-out group-hover:scale-105"
-          />
-        </div>
+      <div className="group flex items-center justify-between rounded-xl overflow-hidden shadow-lg bg-zinc-900/50 border border-zinc-800/50 hover:shadow-xl hover:border-zinc-700/60 transition-all duration-300 ease-in-out transform hover:-translate-y-1">
         <div className="p-6">
           <div className="flex items-center mb-3">
             {post.tags.map((tag, i) => (
@@ -34,6 +23,13 @@ const FeaturedPostCard = ({ post }: { post: BlogPost }) => {
           <p className="text-zinc-500 text-sm mt-4">
             {new Date(post.createdAt).toLocaleDateString("es-AR")}
           </p>
+        </div>
+        <div className="p-6">
+          <img
+            className="rounded-full"
+            src={post.user.avatar_url ?? "/placeholder.jpg"}
+            alt={post.user.id}
+          />
         </div>
       </div>
     </Link>

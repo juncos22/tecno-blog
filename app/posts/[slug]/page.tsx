@@ -52,8 +52,15 @@ const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
           {new Date(post.createdAt).toLocaleTimeString("es-AR", {
             hour: "2-digit",
             minute: "2-digit",
-          })}
+          })}{" "}
+          por {post.user.user_name ?? post.user.name}
+          <img
+            className="size-15"
+            src={post.user.avatar_url ?? "/placeholder.jpg"}
+            alt={post.user.id}
+          />
         </p>
+
         {post.updatedAt && (
           <p className="text-gray-600 mb-4">
             Actualizado el{" "}
@@ -66,7 +73,8 @@ const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
             {new Date(post.updatedAt).toLocaleTimeString("es-AR", {
               hour: "2-digit",
               minute: "2-digit",
-            })}
+            })}{" "}
+            por {post.user.user_name ?? post.user.name}
           </p>
         )}
         <div dangerouslySetInnerHTML={{ __html: post.content }} />

@@ -88,7 +88,7 @@ export const ProfileMenu = ({ user }: ProfileMenuProps) => {
           </Link>
           <button
             onClick={logout}
-            className="w-full text-left text-zinc-300 block px-4 py-2 text-sm hover:bg-zinc-800 transition-colors"
+            className="w-full text-left text-zinc-300 block px-4 py-2 text-sm hover:bg-zinc-800 transition-colors cursor-pointer"
             role="menuitem"
           >
             Cerrar Sesión

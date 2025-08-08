@@ -25,6 +25,7 @@ export const parseBlogPosts = (data: BlogPostFromDB[] | null): BlogPost[] => {
     slug: post.slug,
     userId: post.user_id,
     tags: post.tags || [], // Ensure tags is always an array
+    user: post.user,
   }));
 };
 
@@ -43,6 +44,7 @@ export const parseBlogPost = (data: BlogPostFromDB | null): BlogPost | null => {
     slug: data.slug,
     userId: data.user_id,
     tags: data.tags || [], // Ensure tags is always an array
+    user: data.user,
   };
 };
 
