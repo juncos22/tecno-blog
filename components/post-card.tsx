@@ -30,8 +30,10 @@ const PostCard = ({ post }: { post: BlogPost }) => {
         <div className="p-6">
           <img
             className="rounded-full"
-            src={post.user.avatar_url ?? "/placeholder.jpg"}
-            alt={post.user.id}
+            src={
+              post.user !== null ? post.user?.avatar_url : "/placeholder.jpg"
+            }
+            alt={post.user !== null ? post.user?.id : post.id}
           />
         </div>
       </div>

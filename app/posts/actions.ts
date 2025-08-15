@@ -17,6 +17,9 @@ export async function getBlogPosts(query?: string) {
     supabaseQuery = supabaseQuery.or(
       `title.ilike.%${query}%,content.ilike.%${query}%`
     );
+    // .contains("tags", query)
+    // .ilike("user.name", `%${query}%`)
+    // .ilike("user.user_name", `%${query}%`);
   }
 
   const { data, error } = await supabaseQuery;

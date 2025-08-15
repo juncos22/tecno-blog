@@ -12,10 +12,9 @@ export default async function Page({
 }) {
   const params = await searchParams;
   const query = (params && params.q) || "";
-  console.log(query);
 
   const posts = await getBlogPosts(query);
-  if (posts && posts.length > 0) {
+  if (posts && posts !== null && posts.length > 0) {
     const [featuredPost, ...restPosts] = posts;
     return (
       <>
