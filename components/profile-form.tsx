@@ -68,7 +68,7 @@ export default function ProfileForm({ user }: { user: User }) {
     <div className="max-w-lg mx-auto bg-zinc-900/50 p-8 rounded-lg shadow-lg border border-zinc-800/50">
       <div className="flex flex-col items-center mb-6">
         <img
-          src={previewImage || "/profile.jpg"}
+          src={previewImage || "/favicon.png"}
           alt="User avatar"
           width={120}
           height={120}

@@ -35,7 +35,7 @@ export const ProfileMenu = ({ user }: ProfileMenuProps) => {
     };
   }, [menuRef]);
 
-  const userAvatarUrl = user?.user_metadata?.avatar_url || "/profile.jpg";
+  const userAvatarUrl = user?.user_metadata?.avatar_url || "/favicon.png";
   const userName = user?.user_metadata?.full_name || user?.email;
 
   return (
