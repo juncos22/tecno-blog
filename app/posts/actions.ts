@@ -8,21 +8,20 @@ import { redirect } from "next/navigation";
 export async function getBlogPosts(query?: string) {
   const supabase = await createClient();
   let supabaseQuery = supabase
-    .from("blog_post")
-    .select<"*", BlogPostFromDB>("*,user:users(*)")
-    .eq("is_active", true)
-    .order("created_at", { ascending: false });
+    .from("user_posts")
+    .select()
+    .eq("is_active", true);
 
   if (query) {
     supabaseQuery = supabaseQuery.or(
-      `title.ilike.%${query}%,content.ilike.%${query}%`
+      `title.ilike.%${query}%,content.ilike.%${query}%,name.ilike.%${query}%,user_name.ilike.%${query}%,tags.cs.{${query}}`
     );
-    // .contains("tags", query)
-    // .ilike("user.name", `%${query}%`)
-    // .ilike("user.user_name", `%${query}%`);
+    console.log(await supabaseQuery);
   }
 
-  const { data, error } = await supabaseQuery;
+  const { data, error } = await supabaseQuery.order("created_at", {
+    ascending: false,
+  });
   if (error) {
     console.error("Error fetching blog posts:", error);
     throw new Error(error.message);

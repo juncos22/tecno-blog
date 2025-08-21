@@ -86,13 +86,13 @@ const PostForm = ({ initialPost }: PostFormProps) => {
         );
         setAlertData({
           type: result ? "success" : "error",
-          message: "Publicacion actualizada con exito!",
+          message: "Publicación actualizada con exito!",
         });
       } else {
         let result = await createBlogPost(finalPost as CreateBlogPost);
         setAlertData({
           type: result ? "success" : "error",
-          message: "Publicacion creada con exito!",
+          message: "Publicación creada con exito!",
         });
       }
       setTimeout(() => {

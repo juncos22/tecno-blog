@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { BlogPost } from "@/lib/definitions";
 
 const PostCard = ({ post }: { post: BlogPost }) => {
