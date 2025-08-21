@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { type User } from "@supabase/supabase-js";
 import { uploadImage, getImageUrl } from "@/lib/supabase/storage";
 import { useRouter } from "next/navigation";
+import DeleteProfileButton from "./delete-profile-button";
 
 export default function ProfileForm({ user }: { user: User }) {
   const [fullName, setFullName] = useState("");
@@ -137,6 +138,7 @@ export default function ProfileForm({ user }: { user: User }) {
           >
             {loading ? "Actualizando perfil..." : "Actualizar Perfil"}
           </button>
+          <DeleteProfileButton />
         </div>
       </form>
       {message && <p className="mt-4 text-center text-green-400">{message}</p>}

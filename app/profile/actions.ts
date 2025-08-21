@@ -5,6 +5,9 @@ import { BlogPostFromDB } from "@/lib/definitions";
 import { parseBlogPosts } from "@/lib/helpers";
 import { redirect } from "next/navigation";
 
+import { signOut } from "@/app/auth/actions";
+import { deleteUserPosts } from "../posts/actions";
+
 export async function getPostsByUserId() {
   const supabase = await createClient();
   const userRes = await supabase.auth.getUser();
@@ -26,4 +29,29 @@ export async function getPostsByUserId() {
     throw new Error(error.message);
   }
   return parseBlogPosts(data);
+}
+
+export async function deleteUser() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/auth/login");
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    data: { is_active: false },
+  });
+
+  if (error) {
+    console.error("Error logically deleting user:", error);
+    throw new Error(error.message);
+  }
+
+  const result = await deleteUserPosts();
+  if (result) {
+    await signOut();
+  }
 }

@@ -81,15 +81,29 @@ export async function login(prevState: any, formData: FormData) {
 
   const { email, password } = validatedFields.data;
 
+  const { data } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", email)
+    .eq("is_active", true);
+
+  if (!data || data.length === 0) {
+    return {
+      ...prevState,
+      error: "Credenciales incorrectas",
+    };
+  }
+
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) {
+    console.log(error);
     return {
       ...prevState,
-      error: error.message,
+      error: "Credenciales incorrectas",
     };
   }
 
@@ -115,6 +129,9 @@ export async function signUp(prevState: any, formData: FormData) {
   const { error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      data: { is_active: true, user_name: email.split("@")[0] },
+    },
   });
 
   if (error) {
@@ -124,4 +141,10 @@ export async function signUp(prevState: any, formData: FormData) {
     };
   }
   redirect("/posts");
+}
+
+export async function signOut() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/");
 }

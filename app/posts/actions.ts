@@ -10,7 +10,8 @@ export async function getBlogPosts(query?: string) {
   let supabaseQuery = supabase
     .from("user_posts")
     .select()
-    .eq("is_active", true);
+    .eq("is_active", true)
+    .eq("is_user_active", true);
 
   if (query) {
     supabaseQuery = supabaseQuery.or(
@@ -35,7 +36,9 @@ export async function getBlogPostBySlug(slug: string) {
     .from("blog_post")
     .select("*,user:users(*)")
     .eq("slug", slug)
+    .eq("user.is_active", true)
     .single<BlogPostFromDB>();
+
   if (error) {
     console.error("Error fetching blog post by slug:", error);
     throw new Error(error.message);
@@ -88,6 +91,24 @@ export async function deleteBlogPost(id: string) {
     .from("blog_post")
     .update({ is_active: false })
     .eq("id", id);
+  if (error) {
+    console.error("Error deleting blog post:", error);
+    throw new Error(error.message);
+  }
+  return true;
+}
+
+export async function deleteUserPosts() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { error } = await supabase
+    .from("blog_post")
+    .update({ is_active: false })
+    .eq("user_id", user?.id!);
+
   if (error) {
     console.error("Error deleting blog post:", error);
     throw new Error(error.message);
