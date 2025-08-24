@@ -4,14 +4,11 @@ import SearchBox from "@/components/searchbox";
 import Link from "next/link";
 import React from "react";
 import { getBlogPosts } from "./actions";
+import { PageProps } from "@/.next/types/app/page";
 
 // export const runtime = "edge";
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams?: { q?: string };
-}) {
+export default async function Page({ searchParams }: PageProps) {
   const params = await searchParams;
   const query = (params && params.q) || "";
 

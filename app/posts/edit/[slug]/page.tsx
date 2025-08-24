@@ -4,14 +4,12 @@ import Link from "next/link";
 
 // export const runtime = "edge";
 
-interface PostEditPageProps {
-  params: {
-    slug: string;
-  };
+interface BlogPostPageProps {
+  params: Promise<{ slug: string }>;
 }
 
-export default async function PostEditPage({ params }: PostEditPageProps) {
-  const { slug } = params;
+export default async function PostEditPage({ params }: BlogPostPageProps) {
+  const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
 
   if (!post) {

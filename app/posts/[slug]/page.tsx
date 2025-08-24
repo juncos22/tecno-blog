@@ -5,14 +5,12 @@ import DeletePostButton from "@/components/delete-post-button";
 import { createClient } from "@/lib/supabase/server";
 // export const runtime = "edge";
 
-interface PostDetailPageProps {
-  params: {
-    slug: string;
-  };
+interface BlogPostPageProps {
+  params: Promise<{ slug: string }>;
 }
 
-export default async function PostDetailPage({ params }: PostDetailPageProps) {
-  const { slug } = params;
+export default async function PostDetailPage({ params }: BlogPostPageProps) {
+  const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
   const userResponse = await (await createClient()).auth.getUser();
   const authUser = userResponse.data.user;

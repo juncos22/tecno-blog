@@ -1,7 +1,7 @@
 import React from "react";
 import ProfileCard from "@/components/profile-card";
 
-export const runtime = "edge";
+// export const runtime = "edge";
 
 const AboutPage = () => {
   return (
