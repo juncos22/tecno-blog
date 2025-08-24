@@ -6,7 +6,7 @@ import { parseBlogPosts } from "@/lib/helpers";
 import { redirect } from "next/navigation";
 
 import { signOut } from "@/app/auth/actions";
-import { deleteUserPosts } from "../posts/actions";
+import { deleteUserPosts } from "@/app/posts/actions";
 
 export async function getPostsByUserId() {
   const supabase = await createClient();

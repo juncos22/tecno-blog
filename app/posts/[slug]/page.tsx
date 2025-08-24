@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getBlogPostBySlug } from "../actions";
+import { getBlogPostBySlug } from "@/app/posts/actions";
 import DeletePostButton from "@/components/delete-post-button";
 import { createClient } from "@/lib/supabase/server";
 // export const runtime = "edge";

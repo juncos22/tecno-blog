@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import ProfileForm from "@/components/profile-form";
 import PostCard from "@/components/post-card";
-import { getPostsByUserId } from "./actions";
+import { getPostsByUserId } from "@/app/profile/actions";
 import { redirect } from "next/navigation";
 
 // export const runtime = "edge";
