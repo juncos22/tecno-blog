@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { BlogPost, CreateBlogPost } from "@/lib/definitions";
 import { createBlogPost, updateBlogPost } from "@/app/posts/actions";
-import { uploadImage, getImageUrl } from "@/lib/supabase/storage";
-import Image from "next/image";
 import Alert, { AlertData } from "@/components/alert";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -28,10 +26,10 @@ const PostForm = ({ initialPost }: PostFormProps) => {
   const [tagsInput, setTagsInput] = useState(
     initialPost?.tags.join(", ") || ""
   );
-  const [uploading, setUploading] = useState(false);
-  const [previewImage, setPreviewImage] = useState<string | null>(
-    initialPost?.imageUrl || null
-  );
+  // const [uploading, setUploading] = useState(false);
+  // const [previewImage, setPreviewImage] = useState<string | null>(
+  //   initialPost?.imageUrl || null
+  // );
   const [alertData, setAlertData] = useState<AlertData | null>(null);
 
   const handleChange = (
@@ -51,22 +49,22 @@ const PostForm = ({ initialPost }: PostFormProps) => {
     setTagsInput(e.target.value);
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setUploading(true);
-      setPreviewImage(URL.createObjectURL(file));
-      const imagePath = await uploadImage(file, "post_images");
-      if (imagePath) {
-        const imageUrl = await getImageUrl(imagePath);
-        setPost((prevPost) => ({
-          ...prevPost,
-          imageUrl,
-        }));
-      }
-      setUploading(false);
-    }
-  };
+  // const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     setUploading(true);
+  //     setPreviewImage(URL.createObjectURL(file));
+  //     const imagePath = await uploadImage(file, "post_images");
+  //     if (imagePath) {
+  //       const imageUrl = await getImageUrl(imagePath);
+  //       setPost((prevPost) => ({
+  //         ...prevPost,
+  //         imageUrl,
+  //       }));
+  //     }
+  //     setUploading(false);
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -130,7 +128,7 @@ const PostForm = ({ initialPost }: PostFormProps) => {
         />
       </div>
 
-      <div>
+      {/* <div>
         <label
           htmlFor="image"
           className="block text-sm font-medium text-zinc-300"
@@ -159,7 +157,7 @@ const PostForm = ({ initialPost }: PostFormProps) => {
         {uploading && (
           <p className="text-sm text-zinc-400 mt-2">Subiendo imagen...</p>
         )}
-      </div>
+      </div> */}
 
       <div>
         <label
@@ -197,14 +195,9 @@ const PostForm = ({ initialPost }: PostFormProps) => {
       <div>
         <button
           type="submit"
-          disabled={uploading}
           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50"
         >
-          {uploading
-            ? "Guardando..."
-            : initialPost
-            ? "Actualizar Publicación"
-            : "Guardar Publicación"}
+          {initialPost ? "Actualizar Publicación" : "Guardar Publicación"}
         </button>
       </div>
       {alertData && (

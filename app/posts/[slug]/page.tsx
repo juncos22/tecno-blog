@@ -32,7 +32,7 @@ const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
     <div className="container mx-auto px-4 py-8">
       <article className="prose lg:prose-xl max-w-none">
         <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <Image
             src={post.imageUrl}
             alt={post.title}
@@ -40,7 +40,7 @@ const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
             height={400}
             className="rounded-lg object-cover"
           />
-        </div>
+        </div> */}
         <p className="text-gray-600 mb-4">
           Publicado el{" "}
           {new Date(post.createdAt).toLocaleDateString("es-AR", {
