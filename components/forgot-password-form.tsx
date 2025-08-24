@@ -35,7 +35,7 @@ export function ForgotPasswordForm({
   };
 
   return (
-    <div className="flex flex-col gap-6" {...props}>
+    <div className={`flex flex-col gap-6 ${className}`} {...props}>
       {success ? (
         <div>
           <div>

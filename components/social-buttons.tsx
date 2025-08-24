@@ -1,6 +1,5 @@
 "use client";
 import Google from "@/components/icons/google";
-import LinkedIn from "@/components/icons/linkedin";
 import GitHub from "@/components/icons/github";
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
@@ -27,9 +26,13 @@ const SocialButtons = () => {
         return;
       }
       console.log("OAuth Login:", data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log(error);
-      setAlertData({ type: "error", message: error.message });
+      setAlertData({
+        type: "error",
+        message:
+          error instanceof Error ? error.message : "An unknown error occurred",
+      });
     }
   };
 

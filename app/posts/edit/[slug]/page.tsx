@@ -1,7 +1,8 @@
-import { FC } from "react";
 import { getBlogPostBySlug } from "@/app/posts/actions";
 import PostForm from "@/components/post-form";
 import Link from "next/link";
+
+// export const runtime = "edge";
 
 interface PostEditPageProps {
   params: {
@@ -9,8 +10,8 @@ interface PostEditPageProps {
   };
 }
 
-const PostEditPage: FC<PostEditPageProps> = async ({ params }) => {
-  const { slug } = await params;
+export default async function PostEditPage({ params }: PostEditPageProps) {
+  const { slug } = params;
   const post = await getBlogPostBySlug(slug);
 
   if (!post) {
@@ -32,6 +33,4 @@ const PostEditPage: FC<PostEditPageProps> = async ({ params }) => {
       <PostForm initialPost={post} />
     </div>
   );
-};
-
-export default PostEditPage;
+}

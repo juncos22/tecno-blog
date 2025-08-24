@@ -16,12 +16,12 @@ const DeletePostButton = ({ postId }: DeletePostButtonProps) => {
   const handleDelete = async () => {
     startTransition(async () => {
       try {
-        let result = await deleteBlogPost(postId);
+        const result = await deleteBlogPost(postId);
         if (result) {
           setShowConfirm(false);
           router.push("/posts");
         }
-      } catch (error: any) {
+      } catch (error) {
         console.log(error);
       }
     });

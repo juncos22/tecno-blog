@@ -2,12 +2,7 @@
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { signUp } from "@/app/auth/actions";
-
-const initialState = {
-  errors: {},
-  message: null,
-};
+import { AuthState, signUp } from "@/app/auth/actions";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -23,11 +18,11 @@ function SubmitButton() {
   );
 }
 
-export function SignUpForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
-  const [state, formAction] = useActionState(signUp, initialState);
+export function SignUpForm() {
+  const [state, formAction] = useActionState<AuthState, FormData>(signUp, {
+    errors: [],
+    message: "",
+  });
 
   return (
     <form action={formAction}>
@@ -65,7 +60,7 @@ export function SignUpForm({
         </div>
         {state.errors &&
           Array.isArray(state.errors) &&
-          state.errors.map((err: any, i: number) => (
+          state.errors.map((err: { message: string }, i: number) => (
             <p key={i} className="text-sm text-red-500">
               {err.message}
             </p>

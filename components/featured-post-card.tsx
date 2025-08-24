@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { BlogPost } from "@/lib/definitions";
 
 const FeaturedPostCard = ({ post }: { post: BlogPost }) => {
@@ -25,12 +26,14 @@ const FeaturedPostCard = ({ post }: { post: BlogPost }) => {
           </p>
         </div>
         <div className="p-6">
-          <img
+          <Image
             className="rounded-full"
             src={
               post.user !== null ? post.user?.avatar_url : "/placeholder.jpg"
             }
-            alt={post.user?.id}
+            alt={post.user?.id ?? "User avatar"}
+            width={96}
+            height={96}
           />
         </div>
       </div>

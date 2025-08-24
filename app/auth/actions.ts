@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { redirect } from "next/navigation";
 
 const passwordSchema = z
@@ -26,7 +26,13 @@ const loginSchema = z.object({
     .min(1, { message: "La contraseña no puede estar vacía" }),
 });
 
-export async function updatePassword(prevState: any, formData: FormData) {
+export type AuthState = {
+  errors: z.core.$ZodIssue[];
+  message: string;
+  error?: string | null;
+};
+
+export async function updatePassword(prevState: AuthState, formData: FormData) {
   const supabase = await createClient();
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
@@ -65,7 +71,7 @@ export async function updatePassword(prevState: any, formData: FormData) {
   };
 }
 
-export async function login(prevState: any, formData: FormData) {
+export async function login(prevState: AuthState, formData: FormData) {
   const supabase = await createClient();
   const validatedFields = loginSchema.safeParse(
     Object.fromEntries(formData.entries())
@@ -110,7 +116,7 @@ export async function login(prevState: any, formData: FormData) {
   redirect("/posts");
 }
 
-export async function signUp(prevState: any, formData: FormData) {
+export async function signUp(prevState: AuthState, formData: FormData) {
   const supabase = await createClient();
   const validatedFields = signUpSchema.safeParse(
     Object.fromEntries(formData.entries())

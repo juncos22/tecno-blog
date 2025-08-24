@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { type User } from "@supabase/supabase-js";
 import { uploadImage, getImageUrl } from "@/lib/supabase/storage";
@@ -68,7 +69,7 @@ export default function ProfileForm({ user }: { user: User }) {
   return (
     <div className="max-w-lg mx-auto bg-zinc-900/50 p-8 rounded-lg shadow-lg border border-zinc-800/50">
       <div className="flex flex-col items-center mb-6">
-        <img
+        <Image
           src={previewImage || "/favicon.png"}
           alt="User avatar"
           width={120}

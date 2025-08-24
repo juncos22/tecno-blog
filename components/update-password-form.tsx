@@ -2,14 +2,9 @@
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { updatePassword } from "@/app/auth/actions";
+import { AuthState, updatePassword } from "@/app/auth/actions";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-const initialState = {
-  error: null,
-  message: null,
-};
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -25,11 +20,11 @@ function SubmitButton() {
   );
 }
 
-export function UpdatePasswordForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
-  const [state, formAction] = useActionState(updatePassword, initialState);
+export function UpdatePasswordForm() {
+  const [state, formAction] = useActionState<AuthState, FormData>(
+    updatePassword,
+    { errors: [], message: "" }
+  );
   const router = useRouter();
 
   useEffect(() => {
@@ -39,7 +34,7 @@ export function UpdatePasswordForm({
   }, [state.message, router]);
 
   return (
-    <div className="flex flex-col gap-6" {...props}>
+    <div className={`flex flex-col gap-6`}>
       <div>
         <div>
           <h1 className="text-2xl">Resetea tu Contraseña</h1>

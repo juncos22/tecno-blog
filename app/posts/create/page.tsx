@@ -2,6 +2,8 @@ import PostForm from "@/components/post-form";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
+// export const runtime = "edge";
+
 const CreatePostPage = async () => {
   const supabase = await createClient();
   const userRes = await supabase.auth.getUser();

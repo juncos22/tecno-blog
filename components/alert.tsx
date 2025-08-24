@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 interface AlertProps {
   type: "success" | "error" | "warning";
@@ -13,6 +13,13 @@ export type AlertData = Omit<AlertProps, "onClose" | "duration">;
 const Alert = ({ type, message, onClose, duration }: AlertProps) => {
   const [isVisible, setIsVisible] = useState(true); 
 
+  const handleClose = useCallback(() => {
+    setIsVisible(false);
+    if (onClose) {
+      onClose();
+    }
+  }, [onClose]);
+
   useEffect(() => {
     if (duration) {
       const timer = setTimeout(() => {
@@ -20,14 +27,7 @@ const Alert = ({ type, message, onClose, duration }: AlertProps) => {
       }, duration);
       return () => clearTimeout(timer);
     }
-  }, [duration]);
-
-  const handleClose = () => {
-    setIsVisible(false);
-    if (onClose) {
-      onClose();
-    }
-  };
+  }, [duration, handleClose]);
 
   if (!isVisible) {
     return null;

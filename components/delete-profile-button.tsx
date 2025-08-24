@@ -12,10 +12,12 @@ const DeleteProfileButton = () => {
     startTransition(async () => {
       try {
         await deleteUser();
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.log(error);
         // Opcional: mostrar un mensaje de error al usuario
-        toast(error.message);
+        if (error instanceof Error) {
+          toast(error.message);
+        }
         setShowConfirm(false);
       }
     });

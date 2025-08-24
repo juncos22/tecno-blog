@@ -78,7 +78,7 @@ const PostForm = ({ initialPost }: PostFormProps) => {
 
     try {
       if (initialPost?.id) {
-        let result = await updateBlogPost(
+        const result = await updateBlogPost(
           initialPost.id,
           finalPost as CreateBlogPost
         );
@@ -87,7 +87,7 @@ const PostForm = ({ initialPost }: PostFormProps) => {
           message: "Publicación actualizada con exito!",
         });
       } else {
-        let result = await createBlogPost(finalPost as CreateBlogPost);
+        const result = await createBlogPost(finalPost as CreateBlogPost);
         setAlertData({
           type: result ? "success" : "error",
           message: "Publicación creada con exito!",
@@ -97,10 +97,10 @@ const PostForm = ({ initialPost }: PostFormProps) => {
         setAlertData(null);
         router.push("/posts");
       }, 3000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setAlertData({
         type: "error",
-        message: error.message,
+        message: error instanceof Error ? error.message : "An error occurred",
       });
     }
   };

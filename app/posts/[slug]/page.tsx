@@ -1,9 +1,9 @@
-import { FC } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { getBlogPostBySlug } from "../actions";
 import DeletePostButton from "@/components/delete-post-button";
 import { createClient } from "@/lib/supabase/server";
+// export const runtime = "edge";
 
 interface PostDetailPageProps {
   params: {
@@ -11,8 +11,8 @@ interface PostDetailPageProps {
   };
 }
 
-const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
-  const { slug } = await params;
+export default async function PostDetailPage({ params }: PostDetailPageProps) {
+  const { slug } = params;
   const post = await getBlogPostBySlug(slug);
   const userResponse = await (await createClient()).auth.getUser();
   const authUser = userResponse.data.user;
@@ -32,35 +32,25 @@ const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
     <div className="container mx-auto px-4 py-8">
       <article className="prose lg:prose-xl max-w-none">
         <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-        {/* <div className="mb-8">
-          <Image
-            src={post.imageUrl}
-            alt={post.title}
-            width={800}
-            height={400}
-            className="rounded-lg object-cover"
-          />
-        </div> */}
-        <p className="text-gray-600 mb-4">
-          Publicado el{" "}
-          {new Date(post.createdAt).toLocaleDateString("es-AR", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}{" "}
-          a las{" "}
-          {new Date(post.createdAt).toLocaleTimeString("es-AR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}{" "}
-          por {post.user.user_name ?? post.user.name}
-          <img
-            className="size-15"
-            src={post.user.avatar_url ?? "/placeholder.jpg"}
-            alt={post.user.id}
-          />
-        </p>
-
+        <div className="flex items-center gap-x-2">
+          {post.user?.avatar_url && (
+            <Image
+              className="rounded-full"
+              src={post.user.avatar_url}
+              alt={post.user.user_name ?? "avatar"}
+              width={40}
+              height={40}
+            />
+          )}
+          <p className="text-gray-600 mb-4">
+            por {post.user?.user_name ?? post.user?.name}
+          </p>
+        </div>{" "}
+        a las{" "}
+        {new Date(post.createdAt).toLocaleTimeString("es-AR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}{" "}
         {post.updatedAt && (
           <p className="text-gray-600 mb-4">
             Actualizado el{" "}
@@ -73,8 +63,7 @@ const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
             {new Date(post.updatedAt).toLocaleTimeString("es-AR", {
               hour: "2-digit",
               minute: "2-digit",
-            })}{" "}
-            por {post.user.user_name ?? post.user.name}
+            })}
           </p>
         )}
         <div dangerouslySetInnerHTML={{ __html: post.content }} />
@@ -100,6 +89,4 @@ const PostDetailPage: FC<PostDetailPageProps> = async ({ params }) => {
       </div>
     </div>
   );
-};
-
-export default PostDetailPage;
+}

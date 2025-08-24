@@ -44,7 +44,7 @@ export const ProfileMenu = ({ user }: ProfileMenuProps) => {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 focus:outline-none cursor-pointer"
       >
-        <img
+        <Image
           src={userAvatarUrl}
           alt="User avatar"
           width={40}

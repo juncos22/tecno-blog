@@ -68,8 +68,8 @@ export async function createBlogPost(post: CreateBlogPost) {
 export async function updateBlogPost(id: string, post: CreateBlogPost) {
   const supabase = await createClient();
 
-  let dbPost = parseDbPost(post);
-  console.log("Updating blog post with data:", dbPost);
+  const dbPost = parseDbPost(post);
+  // console.log("Updating blog post with data:", dbPost);
 
   if (dbPost) {
     const { error } = await supabase
@@ -104,14 +104,17 @@ export async function deleteUserPosts() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { error } = await supabase
-    .from("blog_post")
-    .update({ is_active: false })
-    .eq("user_id", user?.id!);
+  if (user) {
+    const { error } = await supabase
+      .from("blog_post")
+      .update({ is_active: false })
+      .eq("user_id", user.id);
 
-  if (error) {
-    console.error("Error deleting blog post:", error);
-    throw new Error(error.message);
+    if (error) {
+      console.error("Error deleting blog post:", error);
+      throw new Error(error.message);
+    }
+    return true;
   }
-  return true;
+  return false;
 }

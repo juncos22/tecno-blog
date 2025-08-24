@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { BlogPost } from "@/lib/definitions";
 
 const PostCard = ({ post }: { post: BlogPost }) => {
@@ -27,12 +28,16 @@ const PostCard = ({ post }: { post: BlogPost }) => {
           </p>
         </div>
         <div className="p-6">
-          <img
+          <Image
             className="rounded-full"
             src={
-              post.user !== null ? post.user?.avatar_url : "/placeholder.jpg"
+              post.user !== null
+                ? post.user?.avatar_url ?? "/placeholder.jpg"
+                : "/placeholder.jpg"
             }
-            alt={post.user !== null ? post.user?.id : post.id}
+            alt={post.user !== null ? post.user?.id ?? post.id : post.id}
+            width={96}
+            height={96}
           />
         </div>
       </div>

@@ -1,6 +1,8 @@
 import React from "react";
 import ProfileCard from "@/components/profile-card";
 
+export const runtime = "edge";
+
 const AboutPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">

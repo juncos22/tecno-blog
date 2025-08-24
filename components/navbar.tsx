@@ -65,7 +65,7 @@ const Navbar = ({ authUser }: NavbarProps) => {
               <input
                 className="peer hidden"
                 type="checkbox"
-                onChange={(_) => toggleMenu()}
+                onChange={() => toggleMenu()}
               />
               <div className="rounded-2xl h-[3px] w-1/2 bg-white duration-500 peer-checked:rotate-[225deg] origin-right peer-checked:-translate-x-[12px] peer-checked:-translate-y-[1px]"></div>
               <div className="rounded-2xl h-[3px] w-full bg-white duration-500 peer-checked:-rotate-45"></div>

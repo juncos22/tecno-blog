@@ -2,6 +2,8 @@ import { SignUpForm } from "@/components/sign-up-form";
 import Link from "next/link";
 import SocialButtons from "@/components/social-buttons";
 
+// export const runtime = "edge";
+
 export default function Page() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-950">

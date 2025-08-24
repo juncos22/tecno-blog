@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/storage/v1/object/public/**",
       },
+      new URL("https://lh3.googleusercontent.com/a/**"),
     ],
   },
 };

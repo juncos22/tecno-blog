@@ -2,12 +2,7 @@
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { login } from "@/app/auth/actions";
-
-const initialState = {
-  errors: {},
-  message: null,
-};
+import { AuthState, login } from "@/app/auth/actions";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -25,7 +20,10 @@ function SubmitButton() {
 }
 
 export function LoginForm() {
-  const [state, formAction] = useActionState(login, initialState);
+  const [state, formAction] = useActionState<AuthState, FormData>(login, {
+    errors: [],
+    message: "",
+  });
 
   return (
     <form action={formAction}>
@@ -64,7 +62,7 @@ export function LoginForm() {
       </div>
       {state.errors &&
         Array.isArray(state.errors) &&
-        state.errors.map((err: any, i: number) => (
+        state.errors.map((err: { message: string }, i: number) => (
           <p key={i} className="text-sm text-red-500">
             {err.message}
           </p>

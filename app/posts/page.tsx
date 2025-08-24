@@ -5,6 +5,8 @@ import Link from "next/link";
 import React from "react";
 import { getBlogPosts } from "./actions";
 
+// export const runtime = "edge";
+
 export default async function Page({
   searchParams,
 }: {

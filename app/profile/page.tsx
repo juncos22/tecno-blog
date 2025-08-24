@@ -4,6 +4,8 @@ import PostCard from "@/components/post-card";
 import { getPostsByUserId } from "./actions";
 import { redirect } from "next/navigation";
 
+// export const runtime = "edge";
+
 export default async function ProfilePage() {
   const supabase = await createClient();
   const {

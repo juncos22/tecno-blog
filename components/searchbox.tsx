@@ -9,7 +9,7 @@ export const SearchBox: React.FC<{
   const router = useRouter();
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    let urlQuery = query ? `?q=${query}` : "";
+    const urlQuery = query ? `?q=${query}` : "";
     router.push(`/posts${urlQuery}`);
   };
   return (
